@@ -28,14 +28,13 @@ app.post("/api/shorturl", async (req, res) => {
 
   try {
     url = new URL(url)
-    dns.lookup(url.hostname, (err, address) => {
-      console.log(address)
+    await dns.promises.lookup(url.hostname)
+  }
+  catch (error) {
+    return res.json({
+      error: 'invalid url'
     })
   }
-  catch {
-    return res.status(400).json({ "error": err })
-  }
-
   // Check if url exists
   const model = await Url.find({ original_url: url })
   if (model.length !== 0) {

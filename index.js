@@ -17,7 +17,6 @@ app.use('/public', express.static(`${process.cwd()}/public`));
 // Configs
 const port = process.env.PORT || 3000;
 
-
 // Endpoints
 app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/views/index.html');
@@ -40,8 +39,9 @@ app.post("/api/shorturl", async (req, res) => {
   // Check if url exists
   const model = await Url.find({ original_url: url })
   if (model.length !== 0) {
-    return res.status(400).json({
-      "error": "This url already exists"
+    return res.status(200).json({
+      original_url: model[0].original_url,
+      short_url: model[0].short_url
     })
   }
 
